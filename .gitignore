@@ -1,5 +1,8 @@
 # Byte-compiled / optimized / DLL files
+venv/
 __pycache__/
+*.Pyc 
+.env
 *.py[codz]
 *$py.class
 
