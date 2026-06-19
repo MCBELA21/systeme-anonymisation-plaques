@@ -219,3 +219,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Modèles entraînés (trop lourds pour GitHub)
+app/services/models/*.pt
