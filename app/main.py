@@ -7,9 +7,33 @@ from app.core.config import settings
 app = FastAPI(
     title=settings.app_name,
     version=settings.version,
+    description="""
+## Système d'anonymisation de plaques d'immatriculation
+
+Ce système permet de détecter et flouter automatiquement les plaques
+d'immatriculation présentes sur des images, afin de respecter les
+exigences du RGPD en matière de protection des données personnelles.
+
+### Pipeline de traitement
+
+1. **Upload** d'une image (JPG, JPEG, PNG)
+2. **Détection** des plaques via un modèle YOLOv8 fine-tuné (mAP50 = 98.6%)
+3. **Floutage** gaussien des zones détectées via OpenCV
+4. **Récupération** de l'image anonymisée
+
+### Acteurs
+
+- **Opérateur** : importe les images et récupère les résultats
+- **Administrateur** : supervise les logs et la configuration
+    """,
+    contact={
+        "name": "VisionRoad Solutions",
+    },
+    license_info={
+        "name": "Projet académique - usage interne",
+    },
 )
 
-# CORS ouvert pour le développement : à restreindre en production
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,10 +41,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_router)
+app.include_router(api_router, tags=["Traitement d'images"])
 
 
-@app.get("/health")
+@app.get("/health", tags=["Système"])
 def health_check() -> dict[str, str]:
-    """Route de santé, utile pour vérifier que le serveur tourne."""
+    """
+    Vérifie que le serveur est opérationnel.
+
+    Utile pour le monitoring et les health checks automatisés.
+    """
     return {"status": "ok"}
